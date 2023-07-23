@@ -1,0 +1,10 @@
+#!/bin/bash
+if ! pgrep -u $USER thunderbird > /dev/null 2>&1; then 
+exec thunderbird 
+fi &
+#if ! pgrep -u $USER spotify > /dev/null 2>&1; then
+#exec spotify --no-zygote 
+#fi &
+while read line; do
+google-chrome $line
+done < teachingurls &
