@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Function to wait until a window with a given name is available
+function wait_for_window {
+    while ! wmctrl -l | grep -q "$1"; do
+        sleep 0.1
+    done
+}
+
+# Function to tile a window to a specific position
+function tile_window {
+    wmctrl -r "$1" -e 0,$2,$3,$4,$5
+}
+
+# Start the programs
+kate &
+firefox &
+konsole &
+dolphin &
+
+# Wait for windows to open
+wait_for_window "Kate"
+wait_for_window "Firefox"
+wait_for_window "Konsole"
+wait_for_window "Dolphin"
+
+# Get screen dimensions
+screen_width=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -d 'x' -f 1)
+screen_height=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -d 'x' -f 2)
+
+# Tile the windows
+tile_window "Kate" 0 0 $((screen_width/2)) $((screen_height/2))
+tile_window "Firefox" $((screen_width/2)) 0 $((screen_width/2)) $((screen_height/2))
+tile_window "Konsole" 0 $((screen_height/2)) $((screen_width/2)) $((screen_height/2))
+tile_window "Dolphin" $((screen_width/2)) $((screen_height/2)) $((screen_width/2)) $((screen_height/2))
+
