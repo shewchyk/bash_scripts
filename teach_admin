@@ -1,36 +1,20 @@
 #!/bin/bash
 
-# Function to wait until a window with a given name is available
-function wait_for_window {
-    while ! wmctrl -l | grep -q "$1"; do
-        sleep 0.1
-    done
-}
-
-# Function to tile a window to a specific position
-function tile_window {
-    wmctrl -r "$1" -e 0,$2,$3,$4,$5
-}
-
-# Start the programs
-kate &
+# Open the programs you want, adjust the commands as needed.
 firefox &
-konsole &
+#konsole &
 dolphin &
 
-# Wait for windows to open
-wait_for_window "Kate"
-wait_for_window "Firefox"
-wait_for_window "Konsole"
-wait_for_window "Dolphin"
+# Wait a moment to ensure the windows have opened.
+sleep 2
 
-# Get screen dimensions
-screen_width=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -d 'x' -f 1)
-screen_height=$(xdpyinfo | awk '/dimensions/{print $2}' | cut -d 'x' -f 2)
+# Get the window IDs for each program.
+firefox_window=$(xdotool search --onlyvisible --class "firefox")
+#konsole_window=$(xdotool search --onlyvisible --class "konsole")
+dolphin_window=$(xdotool search --onlyvisible --class "dolphin")
 
-# Tile the windows
-tile_window "Kate" 0 0 $((screen_width/2)) $((screen_height/2))
-tile_window "Firefox" $((screen_width/2)) 0 $((screen_width/2)) $((screen_height/2))
-tile_window "Konsole" 0 $((screen_height/2)) $((screen_width/2)) $((screen_height/2))
-tile_window "Dolphin" $((screen_width/2)) $((screen_height/2)) $((screen_width/2)) $((screen_height/2))
-
+# Tile the windows to specific areas of the screen.
+# You can adjust the coordinates and sizes as needed.
+wmctrl -i -r $firefox_window -e 0,0,0,2000,1000
+#wmctrl -i -r $konsole_window -e 0,800,0,800,600
+wmctrl -i -r $dolphin_window -e 0,1600,300,1600,800
